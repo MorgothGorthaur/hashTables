@@ -14,6 +14,12 @@ public class Bucket<K, V> {
 		condition = Condition.FREE;
 	}
 
+	public Bucket(K key, V value) {
+		this.key = key;
+		this.value = value;
+		condition = Condition.USED;
+	}
+
 	public void add(K key, V value) {
 		this.key = key;
 		this.value = value;
@@ -21,6 +27,5 @@ public class Bucket<K, V> {
 	} 
 	public void delete() {
 		condition = Condition.DELETED;
-
 	}
 }

@@ -13,16 +13,16 @@ public class App {
     public static void main( String[] args ){
 //    	TestLInkedListHashTable test = new TestLInkedListHashTable();
 //    	test.test();
-//    	TestLinearZondingGenericHashTable secondTest =  new TestLinearZondingGenericHashTable ();
-//     	secondTest.test();
-    	CustomLinearZondingHashTable <String, String> t = new CustomLinearZondingHashTable <>();
-    	for (int i = 0; i < 1000000; i++) {
-    		t.add(""+i, ""+i);
-    	}
-    	Long time = System.nanoTime();
-    	System.out.println(t.get("123456"));
-    	System.out.println(System.nanoTime() - time);
-    	System.out.println(t.getClustersSize());
-    	System.out.println(t.getSize());
+    	TestLinearZondingGenericHashTable secondTest =  new TestLinearZondingGenericHashTable ();
+     	secondTest.test();
+//    	CustomLinearZondingHashTable <Integer, String> t = new CustomLinearZondingHashTable <>();
+//    	for (int i = 0; i < 10000; i++) {
+//    		t.add(i, ""+i);
+//    	}
+//    	Long time = System.nanoTime();
+//    	System.out.println(t.get(123));
+//    	System.out.println(System.nanoTime() - time);
+//    	System.out.println(t.getClustersSize());
+//    	System.out.println(t.getSize());
     } 
 }
