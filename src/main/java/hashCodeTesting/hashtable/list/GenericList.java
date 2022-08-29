@@ -6,34 +6,39 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GenericList<K, V> {
-	private GenericElement<K, V> head = new GenericElement<>();
-	private GenericElement<K, V> tail = new GenericElement<>();
+	private GenericElement<K, V> head;
+	private GenericElement<K, V> tail;
+	private int size;
 
-	public GenericList() {
-		head.setNext(tail);
-		tail.setLast(head);
+	public String getListAsString() {
+		var result = new StringBuilder();
+		var p = head;
+		var first = true;
+		while (p != null) {
+			if (!first) {
+				result.append("---");
+			}
+			result.append("(").append(p.value).append(")");
+			p = p.getNext();
+			first = false;
+		}
+		return result.toString().trim();
 	}
 
 	public void add(K key, V value) {
 		GenericElement<K, V> elem = new GenericElement<>(key, value);
-		GenericElement<K, V> last = tail.getLast();
-		last.setNext(elem);
-		elem.setNext(tail);
-		elem.setLast(last);
-		tail.setLast(elem);
+		if (tail == null) {
+			head = tail = elem;
+		} else {
+			tail.setNext(elem);
+			tail = elem;
+		}
+		size++;
 	}
 
 	public boolean contains(K key) {
-		GenericElement<K, V> nextElem = head;
-		GenericElement<K, V> lastElem = tail;
-		while (!nextElem.equals(lastElem) && !nextElem.getNext().equals(lastElem)) {
-
-			nextElem = nextElem.getNext();
-			lastElem = lastElem.getLast();
-			if (nextElem.getKey().equals(key)) {
-				return true;
-			}
-			if (lastElem.getKey().equals(key)) {
+		for (GenericElement<K, V> p = head; p != null; p = p.getNext()) {
+			if (p.getKey().equals(key)) {
 				return true;
 			}
 		}
@@ -41,46 +46,17 @@ public class GenericList<K, V> {
 	}
 
 	public void delete(K key) {
-		GenericElement<K, V> nextElem = head;
-		GenericElement<K, V> lastElem = tail;
-
-		while (!nextElem.equals(lastElem) && nextElem.getNext() != null) {
-			nextElem = nextElem.getNext();
-			lastElem = lastElem.getLast();
-			if (nextElem.getKey() == key) {
-
-				nextElem.getLast().setNext(nextElem.getNext());
-				nextElem.getNext().setLast(nextElem.getLast());
-			}
-			if (lastElem.getKey() == key) {
-				lastElem.getLast().setNext(lastElem.getNext());
-				lastElem.getNext().setLast(lastElem.getLast());
-			}
-
-		}
-	}
-
-	public void print() {
-		GenericElement<K, V> nextElem = head;
-		while (!nextElem.getNext().equals(tail)) {
-			nextElem = nextElem.getNext();
-			System.out.println(nextElem.getValue());
-		}
+		throw new UnsupportedOperationException();
 	}
 
 	public int size() {
-		int size = 0;
-		GenericElement<K, V> nextElem = head;
-		while (!nextElem.getNext().equals(tail)) {
-			nextElem = nextElem.getNext();
-			size++;
-		}
-		return size; 
+		return size;
 	}
 
-	public String getFirst() {
-		return head.getNext().getValue().toString();
+	public V getFirst() {
+		return head.getValue();
 	}
+
 	public GenericElement <K,V> deleteFirst(){
 		GenericElement <K, V> elem = head.getNext();
 		
@@ -89,39 +65,26 @@ public class GenericList<K, V> {
 		
 	}
 
-	public String get(K key) {
-		String val = "";
-		if (size() == 0) {
-			val = "no found!";
-		}
+	public V get(K key) {
 		if (size() == 1) {
-			val = getFirst();
-
+			return getFirst();
 		}
 		if (size() > 1) {
 			System.out.println("collision! length = " + size());
 			return getInternal(key);
-
 		}
-		return val;
+		throw new IllegalStateException();
 	}
 
-	public String getInternal(K key) {
-		GenericElement<K, V> nextElem = head;
-		GenericElement<K, V> lastElem = tail;
-		while (!nextElem.equals(lastElem) && !nextElem.getNext().equals(lastElem)) {
-			nextElem = nextElem.getNext();
-			lastElem = lastElem.getLast();
-			if (nextElem.getKey().equals(key)) {
-				return nextElem.getValue().toString();
-			}
-			if (lastElem.getKey().equals(key)) {
-				return lastElem.getValue().toString();
+	public V getInternal(K key) {
+		for (GenericElement<K, V> p = head; p != null; p = p.getNext()) {
+			if (p.getKey().equals(key)) {
+				return p.getValue();
 			}
 		}
-
-		return "not found!";
+		return null;
 	}
+
 	public void addAll(GenericList <K,V> lst) {
 		GenericElement<K, V> last = tail.getLast();
 		GenericElement<K, V> first = lst.getHead().getNext();
