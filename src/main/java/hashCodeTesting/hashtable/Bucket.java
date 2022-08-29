@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Bucket<K, V> {
+class Bucket<K, V> {
 	private K key;
 	private V value;
 	private Condition condition;

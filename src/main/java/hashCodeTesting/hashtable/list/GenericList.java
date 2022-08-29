@@ -26,17 +26,6 @@ public class GenericList<K, V> {
 	public boolean contains(K key) {
 		GenericElement<K, V> nextElem = head;
 		GenericElement<K, V> lastElem = tail;
-
-//		while (!nextElem.getNext().equals(lastElem.getLast()) && nextElem.getNext() != null && lastElem.getLast() != null) {
-//			nextElem = nextElem.getNext();
-//			lastElem = lastElem.getLast();
-//			if (nextElem.getKey().equals(key)) {
-//				return true;
-//			}
-//			if (lastElem.getKey().equals(key)) {
-//				return true;
-//			}
-//		}
 		while (!nextElem.equals(lastElem) && !nextElem.getNext().equals(lastElem)) {
 
 			nextElem = nextElem.getNext();
@@ -47,9 +36,6 @@ public class GenericList<K, V> {
 			if (lastElem.getKey().equals(key)) {
 				return true;
 			}
-			// System.out.println(nextElem.getValue().toString() + " "+
-			// lastElem.getValue().toString());
-
 		}
 		return false;
 	}
@@ -102,7 +88,25 @@ public class GenericList<K, V> {
 		return elem;
 		
 	}
+
 	public String get(K key) {
+		String val = "";
+		if (size() == 0) {
+			val = "no found!";
+		}
+		if (size() == 1) {
+			val = getFirst();
+
+		}
+		if (size() > 1) {
+			System.out.println("collision! length = " + size());
+			return getInternal(key);
+
+		}
+		return val;
+	}
+
+	public String getInternal(K key) {
 		GenericElement<K, V> nextElem = head;
 		GenericElement<K, V> lastElem = tail;
 		while (!nextElem.equals(lastElem) && !nextElem.getNext().equals(lastElem)) {
@@ -125,4 +129,21 @@ public class GenericList<K, V> {
 		first.setLast(last);
 		tail = lst.getTail();
 	}
+
+	public boolean deleteFromList(K key) {
+		if (size() == 0) {
+			System.out.println("no found!");
+			return false;
+		}
+		if (size() == 1) {
+			deleteFirst();
+		}
+		if (size() > 1) {
+			System.out.println("collision! length = " + size());
+			delete(key);
+
+		}
+		return true;
+	}
+
 }
