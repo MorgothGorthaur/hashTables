@@ -3,30 +3,21 @@ package hashCodeTesting.hashtable;
 import hashCodeTesting.hashtable.list.GenericElement;
 import hashCodeTesting.hashtable.list.GenericList;
 
+import java.util.ArrayList;
+
 public class LinkedListGenericHashTable<K, V> {
-    private int length;
-    private int numOfUsedBuckets;
-    private GenericList<K, V>[] buckets;
+    private int length = 128;
+    private int numOfUsedBuckets = 0;
+    private ArrayList<GenericList<K, V>> buckets = new ArrayList<>();
 
-    @SuppressWarnings("unchecked")
-    public LinkedListGenericHashTable() {
-        length = 128;
-        numOfUsedBuckets = 0;
-        buckets = new GenericList[length];
-//        for (int i = 0; i < length; i++) {
-//            buckets[i] = new GenericList<K, V>();
-//        }
-
-    }
-
-    private int getHash(K key) {
+    private int getBucketIndex(K key) {
         return (key.hashCode() & 0x7fffffff) % length;
     }
 
     public void add(K key, V value) {
-        int hash = getHash(key);
-        if (!buckets[hash].contains(key)) {
-            buckets[hash].add(key, value);
+        GenericList<K, V> bucket = getBucketByKey(key);
+        if (!bucket.contains(key)) {
+            bucket.add(key, value);
             numOfUsedBuckets++;
         }
         if ((long) length / numOfUsedBuckets < 1.2) {
@@ -34,50 +25,30 @@ public class LinkedListGenericHashTable<K, V> {
         }
     }
 
+    private GenericList<K, V> getBucketByKey(K key) {
+        int hash = getBucketIndex(key);
+        return buckets.get(hash);
+    }
+
     public void delete(K key) {
-        int hash = getHash(key);
-        if (buckets[hash].size() == 0) {
-            System.out.println("no found!");
+        GenericList<K, V> bucket = getBucketByKey(key);
+        if (bucket.deleteFromList(key)) {
+            numOfUsedBuckets -= 1;
         }
-        if (buckets[hash].size() == 1) {
-            buckets[hash].deleteFirst();
-
-        }
-        numOfUsedBuckets -= 1;
-        if (buckets[hash].size() > 1) {
-            System.out.println("collision! length = " + buckets[hash].size());
-            buckets[hash].delete(key);
-
-        }
-
     }
 
     public String get(K key) {
-
-        String val = "";
-        int hash = getHash(key);
-        if (buckets[hash].size() == 0) {
-            val = "no found!";
-        }
-        if (buckets[hash].size() == 1) {
-            val = buckets[hash].getFirst();
-
-        }
-        if (buckets[hash].size() > 1) {
-            System.out.println("collision! length = " + buckets[hash].size());
-            return buckets[hash].get(key);
-
-        }
-        return val;
+        GenericList<K, V> bucket = getBucketByKey(key);
+        return bucket.get(key);
     }
 
     public void getInfo() {
         int badBucketsSize = 0;
         int badBucketsLength = 0;
         for (int i = 0; i < numOfUsedBuckets; i++) {
-            if (buckets[i].size() > 1) {
+            if (buckets.get(i).size() > 1) {
                 badBucketsSize++;
-                badBucketsLength += buckets[i].size();
+                badBucketsLength += buckets.get(i).size();
             }
         }
         System.out.print("bad buckets num = " + badBucketsSize);
@@ -86,22 +57,21 @@ public class LinkedListGenericHashTable<K, V> {
         System.out.println(" " + 100.0 * badBucketsLength / numOfUsedBuckets + "%");
     }
 
-    @SuppressWarnings("unchecked")
     private void rebuildTable() {
         GenericList<K, V> elems = new GenericList<>();
         for (GenericList<K, V> bucket : buckets) {
             elems.addAll(bucket);
         }
         this.length *= 2;
-        this.buckets = new GenericList[length];
+        this.buckets = new ArrayList<>();
 
         for (int i = 0; i < length; i++) {
-            this.buckets[i] = new GenericList<K, V>();
+            this.buckets.set(i, new GenericList<K, V>());
         }
         for (int i = 0; i < numOfUsedBuckets; i++) {
             GenericElement<K, V> elem = elems.deleteFirst();
-            int hash = getHash(elem.getKey());
-            buckets[hash].add(elem.getKey(), elem.getValue());
+            int hash = getBucketIndex(elem.getKey());
+            buckets.get(hash).add(elem.getKey(), elem.getValue());
         }
     }
 }

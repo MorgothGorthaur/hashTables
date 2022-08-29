@@ -1,6 +1,6 @@
 package hashCodeTesting.hashtable;
 
-public enum Condition {
+enum Condition {
 	USED,
 	FREE,
 	DELETED
