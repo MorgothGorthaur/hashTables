@@ -2,6 +2,8 @@ package hashCodeTesting.hashtable;
 
 
 
+import hashCodeTesting.hashtable.key.GoodKey;
+
 import java.util.HashMap;
 
 /**
@@ -11,12 +13,6 @@ import java.util.HashMap;
 public class App {
 
     public static void main( String[] args ){
-        CustomLinearZondingHashTable <String, String> table = new CustomLinearZondingHashTable<>();
-        for(int i = 0; i < 1000000; i++){
-            table.add(""+i, ""+i);
-        }
-        for(int i = 0; i < 1000000; i++){
-            table.delete(""+i);
-        }
+
     } 
 }

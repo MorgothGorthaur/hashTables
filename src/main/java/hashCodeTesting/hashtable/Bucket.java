@@ -10,10 +10,6 @@ class Bucket<K, V> {
 	private V value;
 	private Condition condition;
 
-	public Bucket() {
-		condition = Condition.FREE;
-	}
-
 	public Bucket(K key, V value) {
 		this.key = key;
 		this.value = value;

@@ -3,8 +3,7 @@ package hashCodeTesting.hashtable;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+
 public class CustomLinearZondingHashTable<K, V> {
     private Integer numOfUsedBuckets = 0;
     private Bucket<K, V>[] buckets = new Bucket[100000];
@@ -31,38 +30,10 @@ public class CustomLinearZondingHashTable<K, V> {
         while (buckets[index] != null && !checkIfKeyExist(index, key)) {
             index++;
         }
-        //updateClusterSize(index != hash);
         buckets[index] = new Bucket<K, V>(key, value);
-        numOfUsedBuckets ++;
+        numOfUsedBuckets++;
         checkIfTableNeedsToBeRebuild(buckets[buckets.length - 1] != null
-                || numOfUsedBuckets * 1.0 / buckets.length > 0.7) ;
-    }
-
-    private void checkIfTableNeedsToBeRebuild(boolean bool) {
-        if (bool) {
-            rebuildTable();
-        }
-    }
-    private boolean checkIfKeyExist(int index, K key){
-        if(buckets[index].getCondition().equals(Condition.USED) && buckets[index].getKey().equals(key)){
-            numOfUsedBuckets --;
-            return true;
-        }
-        return false;
-    }
-    private void rebuildTable() {
-        numOfUsedBuckets = 0;
-        @SuppressWarnings("unchecked") Bucket<K, V>[] tmpBuckets = buckets;
-        buckets = new Bucket[tmpBuckets.length *2];
-        for (int i = 0; i < tmpBuckets.length; i++){
-            if (tmpBuckets[i] != null){
-                add(tmpBuckets[i].getKey(), tmpBuckets[i].getValue());
-            }
-        }
-    }
-
-    public int getSize() {
-        return numOfUsedBuckets;
+                || numOfUsedBuckets * 1.0 / buckets.length > 0.7);
     }
 
     public V delete(K key) {
@@ -72,7 +43,7 @@ public class CustomLinearZondingHashTable<K, V> {
             if (index + 1 != buckets.length && buckets[index + 1] == null) {
                 buckets[index] = null;
             }
-            numOfUsedBuckets --;
+            numOfUsedBuckets--;
             return value;
         }
         return null;
@@ -84,6 +55,36 @@ public class CustomLinearZondingHashTable<K, V> {
             return buckets[index].getValue();
         }
         return null;
+    }
+
+
+    private void checkIfTableNeedsToBeRebuild(boolean bool) {
+        if (bool) {
+            rebuildTable();
+        }
+    }
+
+    private boolean checkIfKeyExist(int index, K key) {
+        if (buckets[index].getCondition().equals(Condition.USED) && buckets[index].getKey().equals(key)) {
+            numOfUsedBuckets--;
+            return true;
+        }
+        return false;
+    }
+
+    private void rebuildTable() {
+        numOfUsedBuckets = 0;
+        @SuppressWarnings("unchecked") Bucket<K, V>[] tmpBuckets = buckets;
+        buckets = new Bucket[tmpBuckets.length * 2];
+        for (int i = 0; i < tmpBuckets.length; i++) {
+            if (tmpBuckets[i] != null) {
+                add(tmpBuckets[i].getKey(), tmpBuckets[i].getValue());
+            }
+        }
+    }
+
+    public int getSize() {
+        return numOfUsedBuckets;
     }
 
     public String toString() {
