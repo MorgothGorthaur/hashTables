@@ -32,8 +32,10 @@ public class CustomLinearZondingHashTable<K, V> {
         }
         buckets[index] = new Bucket<K, V>(key, value);
         numOfUsedBuckets++;
-        checkIfTableNeedsToBeRebuild(buckets[buckets.length - 1] != null
-                || numOfUsedBuckets * 1.0 / buckets.length > 0.7);
+        if(buckets[buckets.length - 1] != null
+                || numOfUsedBuckets * 1.0 / buckets.length > 0.7){
+            rebuildTable();
+        }
     }
 
     public V delete(K key) {
@@ -55,13 +57,6 @@ public class CustomLinearZondingHashTable<K, V> {
             return buckets[index].getValue();
         }
         return null;
-    }
-
-
-    private void checkIfTableNeedsToBeRebuild(boolean bool) {
-        if (bool) {
-            rebuildTable();
-        }
     }
 
     private boolean checkIfKeyExist(int index, K key) {
