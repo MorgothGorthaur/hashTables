@@ -1,8 +1,6 @@
 package hashCodeTesting.hashtable;
 
 
-import hashCodeTesting.hashtable.test.TestLInkedListHashTable;
-import hashCodeTesting.hashtable.test.TestLinearZondingGenericHashTable;
 
 import java.util.HashMap;
 
@@ -13,9 +11,12 @@ import java.util.HashMap;
 public class App {
 
     public static void main( String[] args ){
-        HashMap <String, String> map = new HashMap<>();
-        map.put("d", "d");
-        System.out.println(map.get("d"));
-        System.out.println(map.remove("s"));
+        CustomLinearZondingHashTable <String, String> table = new CustomLinearZondingHashTable<>();
+        for(int i = 0; i < 1000000; i++){
+            table.add(""+i, ""+i);
+        }
+        for(int i = 0; i < 1000000; i++){
+            table.delete(""+i);
+        }
     } 
 }
