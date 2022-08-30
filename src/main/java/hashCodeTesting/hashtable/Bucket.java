@@ -25,7 +25,8 @@ class Bucket<K, V> {
 		this.value = value;
 		condition = Condition.USED;
 	} 
-	public void delete() {
+	public V delete() {
 		condition = Condition.DELETED;
+		return value;
 	}
 }

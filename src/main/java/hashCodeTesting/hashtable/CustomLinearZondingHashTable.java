@@ -3,112 +3,96 @@ package hashCodeTesting.hashtable;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+
 @Getter
 @Setter
 public class CustomLinearZondingHashTable<K, V> {
-    private Integer length;
-    private Integer clustersSize;
-    private Bucket<K, V>[] buckets;
-
-    @SuppressWarnings("unchecked")
-    public CustomLinearZondingHashTable() {
-        length = 1000000;
-        clustersSize = 0;
-        buckets = new Bucket[length];
+    private Integer clustersSize = 0;
+    private Bucket<K, V>[] buckets = new Bucket[100000];
+    //private ArrayList<Bucket<K,V>> buckets = new ArrayList<>();
+    private  int hashFunction(K key){
+        return  (key.hashCode() & 0x7fffffff) % buckets.length;
     }
-
-    public int getHash(K key) {
-        return (key.hashCode() & 0x7fffffff) % length;
+    private Integer getBucketIndex(K key) {
+       int index =  hashFunction(key);
+        while (buckets[index] != null) {
+            if (buckets[index].getKey().equals(key) && buckets[index].getCondition().equals(Condition.USED)) {
+                return index;
+            }
+            index++;
+        }
+        return null;
     }
 
     public void add(K key, V value) {
-        int hash = getHash(key);
-
-        while (buckets[hash] != null && !buckets[hash].getKey().equals(key)) {
-            hash++;
+        Integer index = hashFunction(key);
+        while (buckets[index] != null && !buckets[index].getKey().equals(key)) {
+            index++;
         }
-        if (hash != getHash(key)) {
+        updateClusterSize(index != getBucketIndex(key));
+        buckets[index] = new Bucket<K, V>(key, value);
+        checkIfTableNeedsToBeRebuild(buckets[buckets.length- 1] != null || getSize() * 1.0 / buckets.length > 0.7 || 1.0 * clustersSize / buckets.length > 0.2);
+    }
 
-            clustersSize++;
-        }
-
-        buckets[hash] = new Bucket<K, V>(key, value);
-
-        if (buckets[length - 1] != null || getSize() * 1.0 / length > 0.7 || 1.0 * clustersSize / length > 0.2) {
+    private void checkIfTableNeedsToBeRebuild(boolean buckets) {
+        if (buckets) {
             rebuildTable();
         }
     }
 
+    private void updateClusterSize(boolean hash) {
+        if (hash) {
+            clustersSize++;
+        }
+    }
     private void rebuildTable() {
-        System.out.println("clusters size before rebuild = " + clustersSize);
-        length *= 4;
-
         clustersSize = 0;
-        System.out.println("new length = " + length);
-        @SuppressWarnings("unchecked") Bucket<K, V>[] update = new Bucket[length];
+        @SuppressWarnings("unchecked") Bucket<K, V>[] update = new Bucket[buckets.length * 2];
         for (int i = 0; i < buckets.length; i++) {
             if (buckets[i] != null && buckets[i].getCondition().equals(Condition.USED)) {
-                int hash = getHash(buckets[i].getKey());
+                int hash = getBucketIndex(buckets[i].getKey());
                 while (update[hash] != null) {
                     hash++;
                 }
-                if (hash != getHash(buckets[i].getKey())) {
-                    clustersSize++;
-                }
-
+                updateClusterSize(hash != getBucketIndex(buckets[i].getKey()));
                 update[hash] = new Bucket<>(buckets[i].getKey(), buckets[i].getValue());
             }
         }
-
         buckets = update;
-        if (buckets[length - 1] != null) {
-            rebuildTable();
-        }
-
-        System.out.println("clusters size after rebuild = " + clustersSize);
+        checkIfTableNeedsToBeRebuild(buckets[buckets.length - 1] != null);
     }
 
     public int getSize() {
         int size = 0;
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < buckets.length; i++) {
             if (buckets[i] != null) {
                 size++;
             }
         }
-
         return size;
     }
-
-    public void delete(K key) {
-        int hash = getHash(key);
-        while (buckets[hash] != null) {
-            if (buckets[hash].getKey().equals(key) && buckets[hash].getCondition().equals(Condition.USED)) {
-                buckets[hash].delete();
-                if (buckets[hash + 1] == null) {
-                    buckets[hash] = null;
-                    break;
-                }
-            }
-            hash++;
-        }
-        if(hash == length) {
-            System.out.println("not found!");
-        }
+    public V delete(K key) {
+       Integer index = getBucketIndex(key);
+       if(index != null){
+           V value = buckets[index].delete();
+           if (buckets[index+1] == null){
+               buckets[index] = null;
+           }
+           return value;
+       }
+       return null;
     }
-
-    public String get(K key) {
-        int hash = getHash(key);
-        while (buckets[hash] != null) {
-            if (buckets[hash].getKey().equals(key) && buckets[hash].getCondition().equals(Condition.USED)) {
-                return buckets[hash].getKey().toString();
-            }
-            hash++;
+    public V get(K key) {
+        Integer index = getBucketIndex(key);
+        if(index != null){
+            return buckets[index].getValue();
         }
-        return "not found!";
+        return null;
     }
 
     public void print() {
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < buckets.length; i++) {
             if (buckets[i] != null && buckets[i].getCondition().equals(Condition.USED)) {
                 System.out.println(i + " " + buckets[i].getValue().toString());
             }
