@@ -1,10 +1,12 @@
 package hashCodeTesting.hashtable.list;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class GenericElement <K, V>{
 	
 	K key;
@@ -15,7 +17,5 @@ public class GenericElement <K, V>{
 		this.key = key;
 		this.value = value; 
 	}
-	public GenericElement() {
-		
-	}
+
 }

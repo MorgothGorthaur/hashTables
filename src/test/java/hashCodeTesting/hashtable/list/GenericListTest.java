@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GenericListTest {
-    private  GenericList<String, String> list = new GenericList<>();
+    private GenericList<String, String> list = new GenericList<>();
+
     @Test
     void name() {
 
@@ -35,15 +36,17 @@ class GenericListTest {
     private void assertList(GenericList<String, String> list, String value) {
         assertEquals(value, list.getListAsString());
     }
+
     @Test
-    public void deleteShouldReturnNull_ifNotFound(){
+    public void deleteShouldReturnNull_ifNotFound() {
         //when
         String res = list.delete("key");
         //then
         assertNull(res);
     }
+
     @Test
-    public void deleteShouldReturnValue_ifFound(){
+    public void deleteShouldReturnValue_ifFound() {
         //given
         list.add("key", "value");
         //when
@@ -53,20 +56,40 @@ class GenericListTest {
         assertNull(list.get("key"));
 
     }
+
     @Test
-    public void getShouldReturnNull_ifNotFound(){
+    public void getShouldReturnNull_ifNotFound() {
         //when
         String res = list.get("value");
         //then
         assertNull(res);
     }
+
     @Test
-    public void getShouldReturnValue_ifFound(){
+    public void getShouldReturnValue_ifFound() {
         //given
         list.add("key", "value");
         //when
         String res = list.get("key");
         //then
         assertEquals(res, "value");
+    }
+
+    @Test
+    public void deleteFirstShouldReturnNull_ifListIsNull() {
+        //when
+        GenericElement<String, String> res = list.deleteFirst();
+        //given
+        assertNull(res);
+    }
+
+    @Test
+    public void deleteFirstShouldReturnValue_ifListIsNotEmpty() {
+        //given
+        list.add("key", "value");
+        //when
+        GenericElement<String, String> res = list.deleteFirst();
+        //given
+        assertEquals(res.getKey(), "key");
     }
 }

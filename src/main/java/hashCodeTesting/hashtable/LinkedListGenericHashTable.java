@@ -4,25 +4,19 @@ import hashCodeTesting.hashtable.list.GenericElement;
 import hashCodeTesting.hashtable.list.GenericList;
 
 public class LinkedListGenericHashTable<K, V> {
-    private int length = 128;
+
     private int numOfUsedBuckets = 0;
-    private int tableSize = 0;
     @SuppressWarnings("unchecked")
-    private GenericList<K, V>[] buckets = new GenericList[length];
+    private GenericList<K, V>[] buckets = new GenericList[100000];
 
     private int getBucketIndex(K key) {
-        return (key.hashCode() & 0x7fffffff) % length;
-    }
-
-    public int size() {
-        return tableSize;
+        return (key.hashCode() & 0x7fffffff) % buckets.length;
     }
 
     public void add(K key, V value) {
         GenericList<K, V> bucket = getBucketByKey(key);
-
         bucket.add(key, value);
-        if ((long) length / numOfUsedBuckets < 1.2) {
+        if (1.0 * buckets.length / numOfUsedBuckets < 1.2) {
             rebuildTable();
         }
     }
@@ -43,9 +37,9 @@ public class LinkedListGenericHashTable<K, V> {
 
     public V delete(K key) {
         GenericList<K, V> bucket = getBucketByKeyMaybe(key);
-        if (bucket != null ) {
+        if (bucket != null) {
             V deleted = bucket.delete(key);
-            if(deleted != null) {
+            if (deleted != null) {
                 numOfUsedBuckets -= 1;
             }
             return deleted;
@@ -62,19 +56,18 @@ public class LinkedListGenericHashTable<K, V> {
     }
 
     private void rebuildTable() {
-//        GenericList<K, V> elems = new GenericList<>();
-//        for (GenericList<K, V> bucket : buckets) {
-//            elems.addAll(bucket);
-//        }
-//        this.length *= 2;
-//        this.buckets = new GenericList[this.length];
-//
-//        for (int i = 0; i < length; i++) {
-//            this.buckets[i] = new GenericList<>();
-//        }
-//        for (int i = 0; i < numOfUsedBuckets; i++) {
-//            GenericElement<K, V> elem = elems.deleteFirst();
-//            getBucketByKeyMaybe(elem.getKey()).add(elem.getKey(), elem.getValue());
-//        }
+        GenericList<K, V>[] tmp = buckets;
+        buckets = new GenericList[buckets.length * 2];
+        for (int i = 0; i < tmp.length; i++) {
+            if (tmp[i] != null) {
+                GenericElement<K, V> elem = tmp[i].deleteFirst();
+                while (elem != null) {
+                    add(elem.getKey(), elem.getValue());
+                    elem = tmp[i].deleteFirst();
+
+                }
+            }
+        }
+
     }
 }

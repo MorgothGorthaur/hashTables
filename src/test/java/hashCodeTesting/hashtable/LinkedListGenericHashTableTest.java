@@ -1,5 +1,6 @@
 package hashCodeTesting.hashtable;
 
+import hashCodeTesting.hashtable.list.GenericList;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -23,37 +24,6 @@ class LinkedListGenericHashTableTest {
     }
 
     @Test
-    @Disabled
-    void shouldSetSizeToZeroInitially() {
-        assertEquals(0, table.size());
-    }
-
-    @Test
-    @Disabled
-    void shouldIncrementSize_whenElementIsAdded() {
-        table.add("vitya", 21);
-
-        assertEquals(1, table.size());
-    }
-
-    @Test
-    @Disabled
-    void shouldIncrementSize_whenMultipleElementIsAdded() {
-        table.add("vitya", 21);
-
-        assertEquals(1, table.size());
-    }
-
-    @Test
-    @Disabled
-    void shouldNotIncrementSize_whenExistingElementIsAdded() {
-        table.add("vitya", 21);
-        table.add("vitya", 21);
-
-        assertEquals(1, table.size());
-    }
-
-    @Test
     void shouldAddMultipleAndRetrieve() {
         table.add("vitya", 21);
         table.add("andrey", 38);
@@ -70,20 +40,35 @@ class LinkedListGenericHashTableTest {
     }
 
     @Test
-    void deleteShouldReturnNull_ifNotFound(){
+    void deleteShouldReturnNull_ifNotFound() {
         //when
         Integer res = table.delete("key");
         //given
         assertNull(res);
     }
+
     @Test
-    void deleteShouldReturnValue_ifFound(){
+    void deleteShouldReturnValue_ifFound() {
         //given
-        table.add("key",44);
+        table.add("key", 44);
         //when
         Integer res = table.delete("key");
         //given
         assertEquals(res, 44);
         assertNull(table.get("key"));
     }
+
+    @Test
+    public void testGetAndDeleteForABigSizes() {
+        //given
+        for (int i = 0; i < 10000000; i++) {
+            table.add(String.valueOf(i), i);
+        }
+        for (int i = 0; i < 10000000; i++) {
+            assertEquals(table.get(String.valueOf(i)), i);
+            assertEquals(table.delete(String.valueOf(i)), i);
+        }
+    }
+
+
 }

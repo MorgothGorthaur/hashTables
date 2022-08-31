@@ -6,8 +6,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CustomLinearZondingHashTableTest {
     private CustomLinearZondingHashTable<String, String> table = new CustomLinearZondingHashTable<>();
+
     @Test
-    public void shouldIncreaseSizeByOneAfterAdding(){
+    public void shouldIncreaseSizeByOneAfterAdding() {
         //given
         table.add("key", "value");
         table.add("key_2", "value");
@@ -17,8 +18,9 @@ class CustomLinearZondingHashTableTest {
         //then
         assertEquals(res, 3);
     }
+
     @Test
-    public void shouldDecreaseSizeByOneAfterRemoving(){
+    public void shouldDecreaseSizeByOneAfterRemoving() {
         //given
         table.add("key", "value");
         table.add("key_2", "value");
@@ -28,6 +30,7 @@ class CustomLinearZondingHashTableTest {
         //then
         assertEquals(res, 1);
     }
+
     @Test
     public void getShouldReturnValue_ifFound() {
         //given
@@ -57,8 +60,9 @@ class CustomLinearZondingHashTableTest {
         assertEquals(res, "value");
         assertNull(table.get("key"));
     }
+
     @Test
-    public void deleteShouldReturnNull_ifNotFound(){
+    public void deleteShouldReturnNull_ifNotFound() {
         //when
         String res = table.delete("key");
         //then
@@ -66,7 +70,7 @@ class CustomLinearZondingHashTableTest {
     }
 
     @Test
-    public void shouldReturnString(){
+    public void shouldReturnString() {
         //given
         table.add("key", "value");
         table.add("key_2", "value_2");
@@ -74,10 +78,11 @@ class CustomLinearZondingHashTableTest {
         String res = table.toString();
         assertEquals(res, "value value_2");
     }
+
     @Test
-    public void shouldIncreaseLengthOfArrayIfNumOfElementsIsGreaterThenIt(){
+    public void shouldIncreaseLengthOfArrayIfNumOfElementsIsGreaterThenIt() {
         //given
-        for (int i = 0; i < 10000000; i++){
+        for (int i = 0; i < 10000000; i++) {
             table.add(String.valueOf(i), String.valueOf(i));
         }
         //when
@@ -85,14 +90,15 @@ class CustomLinearZondingHashTableTest {
         //then
         assertEquals(res, 10000000);
     }
+
     @Test
-    public void testGetAndDeleteForABigSizes(){
+    public void testGetAndDeleteForABigSizes() {
         //given
-        for (int i = 0; i < 10000000; i++){
+        for (int i = 0; i < 10000000; i++) {
             table.add(String.valueOf(i), String.valueOf(i));
         }
         assertEquals(table.getSize(), 10000000);
-        for(int i = 0; i < 10000000; i++){
+        for (int i = 0; i < 10000000; i++) {
             assertEquals(table.get(String.valueOf(i)), String.valueOf(i));
             assertEquals(table.delete(String.valueOf(i)), String.valueOf(i));
         }
