@@ -1,4 +1,5 @@
-package hashCodeTesting.hashtable;
+package hashCodeTesting.hashtable.linearZondingHashTable;
+
 
 import lombok.Getter;
 import lombok.Setter;

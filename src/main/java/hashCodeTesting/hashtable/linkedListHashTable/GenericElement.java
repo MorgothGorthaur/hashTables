@@ -1,4 +1,4 @@
-package hashCodeTesting.hashtable.list;
+package hashCodeTesting.hashtable.linkedListHashTable;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class GenericElement<K, V> {
+class GenericElement<K, V> {
 
     K key;
     V value;

@@ -1,7 +1,4 @@
-package hashCodeTesting.hashtable;
-
-import hashCodeTesting.hashtable.list.GenericElement;
-import hashCodeTesting.hashtable.list.GenericList;
+package hashCodeTesting.hashtable.linkedListHashTable;
 
 public class LinkedListGenericHashTable<K, V> {
 

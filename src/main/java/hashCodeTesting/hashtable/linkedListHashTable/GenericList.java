@@ -1,10 +1,7 @@
-package hashCodeTesting.hashtable.list;
-
-import lombok.Getter;
-import lombok.Setter;
+package hashCodeTesting.hashtable.linkedListHashTable;
 
 
-public class GenericList<K, V> {
+class GenericList<K, V> {
     private GenericElement<K, V> head;
 
     public String getListAsString() {

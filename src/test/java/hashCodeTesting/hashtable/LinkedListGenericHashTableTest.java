@@ -1,7 +1,6 @@
 package hashCodeTesting.hashtable;
 
-import hashCodeTesting.hashtable.list.GenericList;
-import org.junit.jupiter.api.Disabled;
+import hashCodeTesting.hashtable.linkedListHashTable.LinkedListGenericHashTable;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

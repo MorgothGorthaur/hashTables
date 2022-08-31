@@ -1,7 +1,7 @@
-package hashCodeTesting.hashtable;
+package hashCodeTesting.hashtable.linearZondingHashTable;
 
-import lombok.Getter;
-import lombok.Setter;
+import hashCodeTesting.hashtable.linearZondingHashTable.Bucket;
+import hashCodeTesting.hashtable.linearZondingHashTable.Condition;
 
 
 public class CustomLinearZondingHashTable<K, V> {

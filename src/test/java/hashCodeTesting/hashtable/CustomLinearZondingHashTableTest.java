@@ -1,5 +1,6 @@
 package hashCodeTesting.hashtable;
 
+import hashCodeTesting.hashtable.linearZondingHashTable.CustomLinearZondingHashTable;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
