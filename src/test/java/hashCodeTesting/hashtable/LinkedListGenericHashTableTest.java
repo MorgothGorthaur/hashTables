@@ -70,5 +70,23 @@ class LinkedListGenericHashTableTest {
         }
     }
 
+    @Test
+    public void sizeShouldReturnZero_ifTableIsEmpty() {
+        //when
+        int res = table.size();
+        //then
+        assertEquals(res, 0);
+    }
+
+    @Test
+    public void sizeShouldReturnValue_ifTableIsNotEmpty() {
+        //given
+        table.add("key", 1);
+        //when
+        int res = table.size();
+        //then
+        assertEquals(res, 1);
+    }
+
 
 }

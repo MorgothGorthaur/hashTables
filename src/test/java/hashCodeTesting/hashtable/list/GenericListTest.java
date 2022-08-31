@@ -92,4 +92,22 @@ class GenericListTest {
         //given
         assertEquals(res.getKey(), "key");
     }
+
+    @Test
+    public void sizeShouldReturnZero_ifListIsEmpty(){
+        //when
+        int res = list.size();
+        //then
+        assertEquals(res,0);
+    }
+    @Test
+    public void sizeShouldReturnNumOfElementsInList_ifListIsNotEmpty(){
+        //given
+        list.add("key", "value");
+        //when
+        int res = list.size();
+        //given
+        assertEquals(res, 1);
+    }
+
 }

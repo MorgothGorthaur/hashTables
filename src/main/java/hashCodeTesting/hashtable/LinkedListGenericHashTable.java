@@ -52,9 +52,6 @@ public class LinkedListGenericHashTable<K, V> {
         return bucket == null ? null : bucket.get(key);
     }
 
-    public void getInfo() {
-    }
-
     private void rebuildTable() {
         GenericList<K, V>[] tmp = buckets;
         buckets = new GenericList[buckets.length * 2];
@@ -69,5 +66,15 @@ public class LinkedListGenericHashTable<K, V> {
             }
         }
 
+    }
+
+    public int size() {
+        int size = 0;
+        for (int i = 0; i < buckets.length; i++) {
+            if (buckets[i] != null) {
+                size += buckets[i].size();
+            }
+        }
+        return size;
     }
 }

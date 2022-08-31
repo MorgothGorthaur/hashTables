@@ -10,12 +10,12 @@ public class CustomLinearZondingHashTable<K, V> {
 
 
     public void add(K key, V value) {
-        Integer index =getBucketIndex(key);
-        if(buckets[index] ==null){
-            numOfUsedBuckets ++;
+        Integer index = getBucketIndex(key);
+        if (buckets[index] == null) {
+            numOfUsedBuckets++;
         }
         buckets[index] = new Bucket<K, V>(key, value);
-        if(buckets[buckets.length-1] != null || numOfUsedBuckets * 1.0 / buckets.length > 0.7){
+        if (buckets[buckets.length - 1] != null || numOfUsedBuckets * 1.0 / buckets.length > 0.7) {
             rebuildTable();
         }
     }
@@ -24,7 +24,7 @@ public class CustomLinearZondingHashTable<K, V> {
         Integer index = getBucketIndex(key);
         if (buckets[index] != null) {
             V value = buckets[index].delete();
-            if (buckets[index+1] == null) {
+            if (buckets[index + 1] == null) {
                 buckets[index] = null;
             }
             numOfUsedBuckets--;
@@ -44,6 +44,7 @@ public class CustomLinearZondingHashTable<K, V> {
     public int getSize() {
         return numOfUsedBuckets;
     }
+
     private void rebuildTable() {
         numOfUsedBuckets = 0;
         @SuppressWarnings("unchecked") Bucket<K, V>[] tmpBuckets = buckets;
@@ -65,19 +66,21 @@ public class CustomLinearZondingHashTable<K, V> {
         }
         return res.toString().trim();
     }
+
     private Integer getBucketIndex(K key) {
         int index = (key.hashCode() & 0x7fffffff) % buckets.length;
         while (buckets[index] != null) {
             Bucket<K, V> bucket = buckets[index];
-            if(checkIfKeyExist(bucket, key)){
+            if (checkIfKeyExist(bucket, key)) {
                 return index;
             }
             index++;
         }
         return index;
     }
-    private boolean checkIfKeyExist(Bucket<K,V> bucket, K key) {
-        if (bucket.getKey().equals(key) && bucket.getCondition().equals(Condition.USED) ) {
+
+    private boolean checkIfKeyExist(Bucket<K, V> bucket, K key) {
+        if (bucket.getKey().equals(key) && bucket.getCondition().equals(Condition.USED)) {
             return true;
         }
         return false;

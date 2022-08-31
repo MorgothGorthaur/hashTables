@@ -24,9 +24,9 @@ public class GenericList<K, V> {
 
     public void add(K key, V value) {
         GenericElement<K, V> elem = getElementBeforeKey(key);
-        if (checkIfElementEmpty(elem)) {
+        if (elem == null) {
             head = new GenericElement<>(key, value);
-        } else if (checkIfElementEmpty(elem.getNext()) && !elem.getKey().equals(key)) {
+        } else if (elem.getNext() == null && !elem.getKey().equals(key)) {
             elem.setNext(new GenericElement<>(key, value));
         } else {
             elem.setValue(value);
@@ -37,25 +37,19 @@ public class GenericList<K, V> {
 
     public V delete(K key) {
         GenericElement<K, V> elem = getElementBeforeKey(key);
-        if (checkIfElementEmpty(elem)) return null;
+        if (elem == null) return null;
         if (elem.getKey().equals(key)) {
             head = elem.getNext();
             return elem.getValue();
         }
-        elem.setNext(elem.getNext().getNext());
-        return elem.getNext().getValue();
-    }
-
-    private boolean checkIfElementEmpty(GenericElement<K, V> elem) {
-        if (elem == null) {
-            return true;
-        }
-        return false;
+        GenericElement<K, V> next = elem.getNext();
+        elem.setNext(next.getNext());
+        return next.getValue();
     }
 
     public V get(K key) {
         GenericElement<K, V> elem = getElementBeforeKey(key);
-        if (checkIfElementEmpty(elem)) return null;
+        if (elem == null) return null;
         if (elem.getKey().equals(key)) {
             return elem.getValue();
         } else {
@@ -82,4 +76,13 @@ public class GenericList<K, V> {
         return null;
     }
 
+    public int size() {
+        int size = 0;
+        GenericElement<K, V> elem = head;
+        while (elem != null) {
+            elem = elem.getNext();
+            size++;
+        }
+        return size;
+    }
 }
