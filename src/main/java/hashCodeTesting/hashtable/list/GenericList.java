@@ -26,63 +26,41 @@ public class GenericList<K, V> {
 	}
 
 	public void add(K key, V value) {
-		GenericElement<K, V> elem = new GenericElement<>(key, value);
-		if (tail == null) {
-			head = tail = elem;
-		} else {
-			tail.setNext(elem);
-			tail = elem;
+		GenericElement<K,V> elem = getElementBeforeKey(key);
+		if(elem == null){
+			head = new GenericElement<>(key,value);
+		} else if(elem.getNext() == null && !elem.getKey().equals(key)){
+			elem.setNext(new GenericElement<>(key, value));
+		} else{
+			elem.setValue(value);
 		}
-		size++;
+
+
 	}
 
-	public boolean contains(K key) {
-		for (GenericElement<K, V> p = head; p != null; p = p.getNext()) {
-			if (p.getKey().equals(key)) {
-				return true;
-			}
+	public V delete(K key) {
+		GenericElement<K,V> elem = getElementBeforeKey(key);
+		if(elem == null){
+			return null;
 		}
-		return false;
-	}
-
-	public void delete(K key) {
-		throw new UnsupportedOperationException();
-	}
-
-	public int size() {
-		return size;
-	}
-
-	public V getFirst() {
-		return head.getValue();
-	}
-
-	public GenericElement <K,V> deleteFirst(){
-		GenericElement <K, V> elem = head.getNext();
-		
-		head.setNext(elem.getNext());
-		return elem;
-		
+		if(elem.getKey().equals(key)){
+			head = elem.getNext();
+			return elem.getValue();
+		}
+		elem.setNext(elem.getNext().getNext());
+		return elem.getNext().getValue();
 	}
 
 	public V get(K key) {
-		if (size() == 1) {
-			return getFirst();
+		GenericElement<K,V> elem = getElementBeforeKey(key);
+		if(elem == null){
+			return null;
 		}
-		if (size() > 1) {
-			System.out.println("collision! length = " + size());
-			return getInternal(key);
+		if(elem.getKey().equals(key)){
+			return elem.getValue();
+		}else{
+			return elem.getNext().getValue();
 		}
-		throw new IllegalStateException();
-	}
-
-	public V getInternal(K key) {
-		for (GenericElement<K, V> p = head; p != null; p = p.getNext()) {
-			if (p.getKey().equals(key)) {
-				return p.getValue();
-			}
-		}
-		return null;
 	}
 
 	public void addAll(GenericList <K,V> lst) {
@@ -92,21 +70,14 @@ public class GenericList<K, V> {
 		first.setLast(last);
 		tail = lst.getTail();
 	}
-
-	public boolean deleteFromList(K key) {
-		if (size() == 0) {
-			System.out.println("no found!");
-			return false;
+	private GenericElement<K,V> getElementBeforeKey(K key){
+		GenericElement<K,V> last = head;
+		GenericElement<K, V> next = head;
+		while (next != null && !next.getKey().equals(key)){
+			last = next;
+			next = next.getNext();
 		}
-		if (size() == 1) {
-			deleteFirst();
-		}
-		if (size() > 1) {
-			System.out.println("collision! length = " + size());
-			delete(key);
-
-		}
-		return true;
+		return last;
 	}
 
 }
