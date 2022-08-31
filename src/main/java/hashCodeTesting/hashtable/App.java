@@ -13,5 +13,13 @@ import java.util.HashMap;
 public class App {
 
     public static void main( String[] args ){
+        CustomLinearZondingHashTable<String, String> table = new CustomLinearZondingHashTable<>();
+        for(int i = 0; i < 10000000; i ++){
+            table.add(String.valueOf(i), String.valueOf(i));
+        }
+        for(int i = 0; i < 10000000; i++){
+            table.delete(String.valueOf(i));
+        }
+        System.out.println(table.getSize());
     } 
 }

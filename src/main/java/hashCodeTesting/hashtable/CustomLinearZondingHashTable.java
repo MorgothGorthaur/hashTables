@@ -8,40 +8,23 @@ public class CustomLinearZondingHashTable<K, V> {
     private Integer numOfUsedBuckets = 0;
     private Bucket<K, V>[] buckets = new Bucket[100000];
 
-    private int hashFunction(K key) {
-        return (key.hashCode() & 0x7fffffff) % buckets.length;
-    }
-
-    private Integer getBucketIndex(K key) {
-        int index = hashFunction(key);
-        while (!checkIfBucketEmpty(index)) {
-            Bucket<K, V> bucket = buckets[index];
-            if (bucket.getKey().equals(key) && bucket.getCondition().equals(Condition.USED)) {
-                return index;
-            }
-            index++;
-        }
-        return null;
-    }
 
     public void add(K key, V value) {
-        int hash = hashFunction(key);
-        int index = hash;
-        while (!checkIfBucketEmpty(index) && !checkIfKeyExist(index, key)) {
-            index++;
+        Integer index =getBucketIndex(key);
+        if(buckets[index] ==null){
+            numOfUsedBuckets ++;
         }
         buckets[index] = new Bucket<K, V>(key, value);
-        numOfUsedBuckets++;
-        if(!checkIfBucketEmpty(buckets.length -1) || numOfUsedBuckets * 1.0 / buckets.length > 0.7){
+        if(buckets[buckets.length-1] != null || numOfUsedBuckets * 1.0 / buckets.length > 0.7){
             rebuildTable();
         }
     }
 
     public V delete(K key) {
         Integer index = getBucketIndex(key);
-        if (index != null) {
+        if (buckets[index] != null) {
             V value = buckets[index].delete();
-            if (checkIfBucketEmpty(index+1)) {
+            if (buckets[index+1] == null) {
                 buckets[index] = null;
             }
             numOfUsedBuckets--;
@@ -52,20 +35,15 @@ public class CustomLinearZondingHashTable<K, V> {
 
     public V get(K key) {
         Integer index = getBucketIndex(key);
-        if (index != null) {
+        if (buckets[index] != null) {
             return buckets[index].getValue();
         }
         return null;
     }
 
-    private boolean checkIfKeyExist(int index, K key) {
-        if (buckets[index].getCondition().equals(Condition.USED) && buckets[index].getKey().equals(key)) {
-            numOfUsedBuckets--;
-            return true;
-        }
-        return false;
+    public int getSize() {
+        return numOfUsedBuckets;
     }
-
     private void rebuildTable() {
         numOfUsedBuckets = 0;
         @SuppressWarnings("unchecked") Bucket<K, V>[] tmpBuckets = buckets;
@@ -75,10 +53,6 @@ public class CustomLinearZondingHashTable<K, V> {
                 add(tmpBuckets[i].getKey(), tmpBuckets[i].getValue());
             }
         }
-    }
-
-    public int getSize() {
-        return numOfUsedBuckets;
     }
 
     public String toString() {
@@ -91,11 +65,22 @@ public class CustomLinearZondingHashTable<K, V> {
         }
         return res.toString().trim();
     }
-    private boolean checkIfBucketEmpty(int index){
-        if(buckets[index] == null){
-            return true;
-        } else {
-            return false;
+    private Integer getBucketIndex(K key) {
+        int index = (key.hashCode() & 0x7fffffff) % buckets.length;
+        while (buckets[index] != null) {
+            Bucket<K, V> bucket = buckets[index];
+            if(checkIfKeyExist(bucket, key)){
+                return index;
+            }
+            index++;
         }
+        return index;
     }
+    private boolean checkIfKeyExist(Bucket<K,V> bucket, K key) {
+        if (bucket.getKey().equals(key) && bucket.getCondition().equals(Condition.USED) ) {
+            return true;
+        }
+        return false;
+    }
+
 }
