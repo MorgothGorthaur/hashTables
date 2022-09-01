@@ -1,4 +1,5 @@
-package hashCodeTesting.hashtable;
+package hashCodeTesting.hashtable.linearZondingHashTable;
+
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,10 +10,6 @@ class Bucket<K, V> {
 	private K key;
 	private V value;
 	private Condition condition;
-
-	public Bucket() {
-		condition = Condition.FREE;
-	}
 
 	public Bucket(K key, V value) {
 		this.key = key;
@@ -25,7 +22,8 @@ class Bucket<K, V> {
 		this.value = value;
 		condition = Condition.USED;
 	} 
-	public void delete() {
+	public V delete() {
 		condition = Condition.DELETED;
+		return value;
 	}
 }
