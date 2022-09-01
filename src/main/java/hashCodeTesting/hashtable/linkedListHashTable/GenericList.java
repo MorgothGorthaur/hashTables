@@ -3,6 +3,7 @@ package hashCodeTesting.hashtable.linkedListHashTable;
 
 class GenericList<K, V> {
     private GenericElement<K, V> head;
+    private int size = 0;
     public String getListAsString() {
         var result = new StringBuilder();
         var p = head;
@@ -23,18 +24,20 @@ class GenericList<K, V> {
         //if list is empty
         if(elem == null){
             head =  new GenericElement<>(key,value);
+            size ++;
         }
-        //if list has only one element, and this element contains key
+        //if head contains key
         if(checkIfElementExistKey(key,elem)){
             elem.setValue(value);
         }
         //if one of the elements contains key
         if(elem != null && checkIfElementExistKey(key,elem.getNext())){
-            GenericElement<K, V> next = new GenericElement<>(key, value);
+            GenericElement<K, V> next = elem.getNext();
             next.setValue(value);
         }
         //add element to end of the list
         if(elem != null && elem.getNext() == null){
+            size ++;
             elem.setNext(new GenericElement<>(key,value));
         }
 
@@ -43,10 +46,12 @@ class GenericList<K, V> {
     public V delete(K key) {
         GenericElement<K, V> elem = getElementBeforeKeyOrLastElement(key);
         if (checkIfElementExistKey(key, elem)) {
+            size --;
             head = elem.getNext();
             return elem.getValue();
         }
         if (elem != null && checkIfElementExistKey(key, elem.getNext())) {
+            size --;
             GenericElement<K, V> next = elem.getNext();
             elem.setNext(next.getNext());
             return next.getValue();
@@ -90,12 +95,6 @@ class GenericList<K, V> {
     }
 
     public int size() {
-        int size = 0;
-        GenericElement<K, V> elem = head;
-        while (elem != null) {
-            elem = elem.getNext();
-            size++;
-        }
         return size;
     }
 }
