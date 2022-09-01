@@ -3,7 +3,6 @@ package hashCodeTesting.hashtable.linkedListHashTable;
 
 class GenericList<K, V> {
     private GenericElement<K, V> head;
-
     public String getListAsString() {
         var result = new StringBuilder();
         var p = head;
@@ -19,25 +18,30 @@ class GenericList<K, V> {
         return result.toString().trim();
     }
 
-    public void add(K key, V value) {
-        if (head == null) {
-            head = new GenericElement<>(key, value);
-        } else {
-            GenericElement<K, V> elem = getElementBeforeKey(key);
-            if (checkIfElementExistKey(key,elem)) {
-                elem.setValue(value);
-            } else if (elem.getNext() == null) {
-                elem.setNext(new GenericElement<>(key, value));
-            } else {
-                GenericElement<K, V> next = new GenericElement<>(key, value);
-                next.setValue(value);
-            }
+    public void addOrReplace(K key, V value) {
+        GenericElement<K, V> elem = getElementBeforeKeyOrLastElement(key);
+        //if list is empty
+        if(elem == null){
+            head =  new GenericElement<>(key,value);
+        }
+        //if list has only one element, and this element contains key
+        if(checkIfElementExistKey(key,elem)){
+            elem.setValue(value);
+        }
+        //if one of the elements contains key
+        if(elem != null && checkIfElementExistKey(key,elem.getNext())){
+            GenericElement<K, V> next = new GenericElement<>(key, value);
+            next.setValue(value);
+        }
+        //add element to end of the list
+        if(elem != null && elem.getNext() == null){
+            elem.setNext(new GenericElement<>(key,value));
         }
 
     }
 
     public V delete(K key) {
-        GenericElement<K, V> elem = getElementBeforeKey(key);
+        GenericElement<K, V> elem = getElementBeforeKeyOrLastElement(key);
         if (checkIfElementExistKey(key, elem)) {
             head = elem.getNext();
             return elem.getValue();
@@ -56,7 +60,7 @@ class GenericList<K, V> {
 
 
     public V get(K key) {
-        GenericElement<K, V> elem = getElementBeforeKey(key);
+        GenericElement<K, V> elem = getElementBeforeKeyOrLastElement(key);
         if (checkIfElementExistKey(key,elem)) {
             return elem.getValue();
         }
@@ -66,7 +70,7 @@ class GenericList<K, V> {
         return null;
     }
 
-    private GenericElement<K, V> getElementBeforeKey(K key) {
+    private GenericElement<K, V> getElementBeforeKeyOrLastElement(K key) {
         GenericElement<K, V> last = head;
         GenericElement<K, V> next = head;
         while (next != null && !next.getKey().equals(key)) {

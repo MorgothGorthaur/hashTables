@@ -13,13 +13,13 @@ class GenericListTest {
 
         assertList(list, "");
 
-        list.add("a", "a");
+        list.addOrReplace("a", "a");
         assertList(list, "(a)");
 
-        list.add("b", "b");
+        list.addOrReplace("b", "b");
         assertList(list, "(a)---(b)");
 
-        list.add("c", "c");
+        list.addOrReplace("c", "c");
         assertList(list, "(a)---(b)---(c)");
 
 
@@ -49,7 +49,7 @@ class GenericListTest {
     @Test
     public void deleteShouldReturnValue_ifFound() {
         //given
-        list.add("key", "value");
+        list.addOrReplace("key", "value");
 
         //when
         String res = list.delete("key");
@@ -70,7 +70,7 @@ class GenericListTest {
     @Test
     public void getShouldReturnValue_ifFound() {
         //given
-        list.add("key", "value");
+        list.addOrReplace("key", "value");
         //when
         String res = list.get("key");
         //then
@@ -88,7 +88,7 @@ class GenericListTest {
     @Test
     public void deleteFirstShouldReturnValue_ifListIsNotEmpty() {
         //given
-        list.add("key", "value");
+        list.addOrReplace("key", "value");
         //when
        KeyEndValue<String, String> res = list.deleteFirst();
         //given
@@ -105,7 +105,7 @@ class GenericListTest {
     @Test
     public void sizeShouldReturnNumOfElementsInList_ifListIsNotEmpty(){
         //given
-        list.add("key", "value");
+        list.addOrReplace("key", "value");
         //when
         int res = list.size();
         //given

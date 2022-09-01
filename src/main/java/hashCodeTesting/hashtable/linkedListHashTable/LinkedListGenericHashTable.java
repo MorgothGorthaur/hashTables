@@ -6,7 +6,7 @@ import java.util.function.ObjDoubleConsumer;
 
 public class LinkedListGenericHashTable<K, V> {
 
-    private int numOfUsedBuckets = 0;
+    private int numOfElements = 0;
     @SuppressWarnings("unchecked")
     private GenericList[] buckets = new GenericList[100000];
 
@@ -16,8 +16,9 @@ public class LinkedListGenericHashTable<K, V> {
 
     public void add(K key, V value) {
         GenericList<K, V> bucket = getBucketByKey(key);
-        bucket.add(key, value);
-        if (1.0 * buckets.length / numOfUsedBuckets < 1.2) {
+        bucket.addOrReplace(key, value);
+        numOfElements += bucket.size();
+        if (1.0 * buckets.length / numOfElements < 1.2) {
             rebuildTable();
         }
     }
@@ -26,8 +27,9 @@ public class LinkedListGenericHashTable<K, V> {
         int hash = getBucketIndex(key);
         if (buckets[hash] == null) {
             buckets[hash] = new GenericList<>();
-            numOfUsedBuckets++;
+
         }
+        numOfElements -= buckets[hash].size();
         return buckets[hash];
     }
 
@@ -41,7 +43,7 @@ public class LinkedListGenericHashTable<K, V> {
         if (bucket != null) {
             V deleted = bucket.delete(key);
             if (deleted != null) {
-                numOfUsedBuckets -= 1;
+                numOfElements --;
             }
             return deleted;
         }
