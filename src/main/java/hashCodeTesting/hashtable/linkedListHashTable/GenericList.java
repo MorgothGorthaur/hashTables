@@ -20,40 +20,32 @@ class GenericList<K, V> {
     }
 
     public void addOrReplace(K key, V value) {
-        GenericElement<K, V> elem = getElementBeforeKeyOrLastElement(key);
-        //if list is empty
-        if(elem == null){
-            head =  new GenericElement<>(key,value);
-            size ++;
-        }
-        //if head contains key
-        if(checkIfElementExistKey(key,elem)){
-            elem.setValue(value);
-        }
-        //if one of the elements contains key
-        if(elem != null && checkIfElementExistKey(key,elem.getNext())){
-            GenericElement<K, V> next = elem.getNext();
-            next.setValue(value);
-        }
-        //add element to end of the list
-        if(elem != null && elem.getNext() == null){
-            size ++;
-            elem.setNext(new GenericElement<>(key,value));
-        }
+           GenericElement [] elem = getElementByKeyOrLastElem(key);
+           GenericElement <K,V> last = elem[0];
+           GenericElement <K,V> next = elem[1];
+           if (checkIfElementExistKey(key, next)) {
+               next.setValue(value);
+           } else if(last != null) {
+               size ++;
+               last.setNext(new GenericElement<>(key, value));
+           } else {
+               size ++;
+               head = new GenericElement<>(key,value);
+           }
 
     }
 
     public V delete(K key) {
-        GenericElement<K, V> elem = getElementBeforeKeyOrLastElement(key);
-        if (checkIfElementExistKey(key, elem)) {
+        GenericElement [] elem = getElementByKeyOrLastElem(key);
+        GenericElement <K,V> last = elem[0];
+        GenericElement <K,V> next = elem[1];
+        if(checkIfElementExistKey(key,next)){
             size --;
-            head = elem.getNext();
-            return elem.getValue();
-        }
-        if (elem != null && checkIfElementExistKey(key, elem.getNext())) {
-            size --;
-            GenericElement<K, V> next = elem.getNext();
-            elem.setNext(next.getNext());
+            if(next == head) {
+                head = next.getNext();
+            } else {
+                last.setNext(next.getNext());
+            }
             return next.getValue();
         }
         return null;
@@ -65,24 +57,25 @@ class GenericList<K, V> {
 
 
     public V get(K key) {
-        GenericElement<K, V> elem = getElementBeforeKeyOrLastElement(key);
-        if (checkIfElementExistKey(key,elem)) {
-            return elem.getValue();
-        }
-        if(elem != null && checkIfElementExistKey(key, elem.getNext())){
-            return elem.getNext().getValue();
+        GenericElement [] elem = getElementByKeyOrLastElem(key);
+        GenericElement <K,V> next = elem[1];
+        if(checkIfElementExistKey(key,next)){
+            return next.getValue();
         }
         return null;
     }
 
-    private GenericElement<K, V> getElementBeforeKeyOrLastElement(K key) {
-        GenericElement<K, V> last = head;
+    private GenericElement[] getElementByKeyOrLastElem(K key) {
+        GenericElement<K, V> last = null;
         GenericElement<K, V> next = head;
         while (next != null && !next.getKey().equals(key)) {
             last = next;
             next = next.getNext();
         }
-        return last;
+        GenericElement [] elems = new GenericElement[2];
+        elems[0] = last;
+        elems[1] = next;
+        return elems;
     }
 
     public KeyEndValue deleteFirst() {

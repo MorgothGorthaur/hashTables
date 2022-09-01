@@ -16,8 +16,9 @@ public class LinkedListGenericHashTable<K, V> {
 
     public void add(K key, V value) {
         GenericList<K, V> bucket = getBucketByKey(key);
+        int listSizeBeforeAdd = bucket.size();
         bucket.addOrReplace(key, value);
-        numOfElements += bucket.size();
+        numOfElements += bucket.size() - listSizeBeforeAdd;
         if (1.0 * buckets.length / numOfElements < 1.2) {
             rebuildTable();
         }
@@ -29,7 +30,6 @@ public class LinkedListGenericHashTable<K, V> {
             buckets[hash] = new GenericList<>();
 
         }
-        numOfElements -= buckets[hash].size();
         return buckets[hash];
     }
 
