@@ -87,6 +87,7 @@ class GenericList<K, V> {
 
     public KeyEndValue deleteFirst() {
         if (head != null) {
+            size --;
             GenericElement<K, V> elem = head;
             head = elem.getNext();
             return new KeyEndValue(elem);
