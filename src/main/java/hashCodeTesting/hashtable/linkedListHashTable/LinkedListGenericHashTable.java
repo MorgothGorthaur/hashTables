@@ -57,7 +57,7 @@ public class LinkedListGenericHashTable<K, V> {
         GenericList<K,V>[] tmp = Arrays.stream(buckets).filter(Objects::nonNull).toArray(GenericList[] ::new);
         buckets = new GenericList[buckets.length * 2];
         for(GenericList<K,V> bucketList : tmp){
-            GenericElement <K,V> elem = bucketList.deleteFirst();
+            KeyEndValue<K,V> elem = bucketList.deleteFirst();
             while (elem != null){
                 add(elem.getKey(), elem.getValue());
                 elem = bucketList.deleteFirst();

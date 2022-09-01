@@ -76,11 +76,11 @@ class GenericList<K, V> {
         return last;
     }
 
-    public GenericElement<K, V> deleteFirst() {
+    public KeyEndValue deleteFirst() {
         if (head != null) {
             GenericElement<K, V> elem = head;
             head = elem.getNext();
-            return elem;
+            return new KeyEndValue(elem);
         }
         return null;
     }

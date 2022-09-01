@@ -80,7 +80,7 @@ class GenericListTest {
     @Test
     public void deleteFirstShouldReturnNull_ifListIsNull() {
         //when
-        GenericElement<String, String> res = list.deleteFirst();
+        KeyEndValue<String, String> res = list.deleteFirst();
         //given
         assertNull(res);
     }
@@ -90,7 +90,7 @@ class GenericListTest {
         //given
         list.add("key", "value");
         //when
-        GenericElement<String, String> res = list.deleteFirst();
+       KeyEndValue<String, String> res = list.deleteFirst();
         //given
         assertEquals(res.getKey(), "key");
     }
