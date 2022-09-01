@@ -22,6 +22,7 @@ class GenericListTest {
         list.add("c", "c");
         assertList(list, "(a)---(b)---(c)");
 
+
         list.delete("a");
         assertList(list, "(b)---(c)");
 
@@ -49,6 +50,7 @@ class GenericListTest {
     public void deleteShouldReturnValue_ifFound() {
         //given
         list.add("key", "value");
+
         //when
         String res = list.delete("key");
         //then

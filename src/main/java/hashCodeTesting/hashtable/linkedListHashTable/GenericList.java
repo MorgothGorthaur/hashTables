@@ -20,38 +20,50 @@ class GenericList<K, V> {
     }
 
     public void add(K key, V value) {
-        GenericElement<K, V> elem = getElementBeforeKey(key);
-        if (elem == null) {
+        if (head == null) {
             head = new GenericElement<>(key, value);
-        } else if (elem.getNext() == null && !elem.getKey().equals(key)) {
-            elem.setNext(new GenericElement<>(key, value));
         } else {
-            elem.setValue(value);
+            GenericElement<K, V> elem = getElementBeforeKey(key);
+            if (checkIfElementExistKey(key,elem)) {
+                elem.setValue(value);
+            } else if (elem.getNext() == null) {
+                elem.setNext(new GenericElement<>(key, value));
+            } else {
+                GenericElement<K, V> next = new GenericElement<>(key, value);
+                next.setValue(value);
+            }
         }
-
 
     }
 
     public V delete(K key) {
         GenericElement<K, V> elem = getElementBeforeKey(key);
-        if (elem == null) return null;
-        if (elem.getKey().equals(key)) {
+        if (checkIfElementExistKey(key, elem)) {
             head = elem.getNext();
             return elem.getValue();
         }
-        GenericElement<K, V> next = elem.getNext();
-        elem.setNext(next.getNext());
-        return next.getValue();
+        if (elem != null && checkIfElementExistKey(key, elem.getNext())) {
+            GenericElement<K, V> next = elem.getNext();
+            elem.setNext(next.getNext());
+            return next.getValue();
+        }
+        return null;
     }
+
+    private boolean checkIfElementExistKey(K key, GenericElement<K, V> elem) {
+        return elem != null && elem.getKey().equals(key);
+    }
+
 
     public V get(K key) {
         GenericElement<K, V> elem = getElementBeforeKey(key);
-        if (elem == null) return null;
-        if (elem.getKey().equals(key)) {
+        if (checkIfElementExistKey(key,elem)) {
             return elem.getValue();
-        } else {
+        }
+        if(elem != null && checkIfElementExistKey(key, elem.getNext())){
             return elem.getNext().getValue();
         }
+        return null;
     }
 
     private GenericElement<K, V> getElementBeforeKey(K key) {

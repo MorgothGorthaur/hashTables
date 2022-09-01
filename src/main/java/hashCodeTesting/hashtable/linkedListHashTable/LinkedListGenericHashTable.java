@@ -1,10 +1,14 @@
 package hashCodeTesting.hashtable.linkedListHashTable;
 
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.function.ObjDoubleConsumer;
+
 public class LinkedListGenericHashTable<K, V> {
 
     private int numOfUsedBuckets = 0;
     @SuppressWarnings("unchecked")
-    private GenericList<K, V>[] buckets = new GenericList[100000];
+    private GenericList[] buckets = new GenericList[100000];
 
     private int getBucketIndex(K key) {
         return (key.hashCode() & 0x7fffffff) % buckets.length;
@@ -50,19 +54,15 @@ public class LinkedListGenericHashTable<K, V> {
     }
 
     private void rebuildTable() {
-        GenericList<K, V>[] tmp = buckets;
+        GenericList<K,V>[] tmp = Arrays.stream(buckets).filter(Objects::nonNull).toArray(GenericList[] ::new);
         buckets = new GenericList[buckets.length * 2];
-        for (int i = 0; i < tmp.length; i++) {
-            if (tmp[i] != null) {
-                GenericElement<K, V> elem = tmp[i].deleteFirst();
-                while (elem != null) {
-                    add(elem.getKey(), elem.getValue());
-                    elem = tmp[i].deleteFirst();
-
-                }
+        for(GenericList<K,V> bucketList : tmp){
+            GenericElement <K,V> elem = bucketList.deleteFirst();
+            while (elem != null){
+                add(elem.getKey(), elem.getValue());
+                elem = bucketList.deleteFirst();
             }
         }
-
     }
 
     public int size() {
