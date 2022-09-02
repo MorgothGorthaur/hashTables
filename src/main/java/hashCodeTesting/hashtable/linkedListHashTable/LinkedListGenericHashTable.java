@@ -16,7 +16,7 @@ public class LinkedListGenericHashTable<K, V> {
 
     public void add(K key, V value) {
         GenericList<K, V> bucket = getBucketByKey(key);
-        int listSizeBeforeAdd = bucket.size;
+        var listSizeBeforeAdd = bucket.size;
         bucket.addOrReplace(key, value);
         numOfElements += bucket.size - listSizeBeforeAdd;
         if (1.0 * buckets.length / numOfElements < 1.2) {
@@ -25,7 +25,7 @@ public class LinkedListGenericHashTable<K, V> {
     }
 
     private GenericList<K, V> getBucketByKey(K key) {
-        int hash = getBucketIndex(key);
+        var hash = getBucketIndex(key);
         if (buckets[hash] == null) {
             buckets[hash] = new GenericList<>();
 
@@ -39,7 +39,7 @@ public class LinkedListGenericHashTable<K, V> {
     }
 
     public V delete(K key) {
-        GenericList<K, V> bucket = getBucketByKeyMaybe(key);
+        var bucket = getBucketByKeyMaybe(key);
         if (bucket != null) {
             V deleted = bucket.delete(key);
             if (deleted != null) {
@@ -51,7 +51,7 @@ public class LinkedListGenericHashTable<K, V> {
     }
 
     public V get(K key) {
-        GenericList<K, V> bucket = getBucketByKeyMaybe(key);
+        var bucket = getBucketByKeyMaybe(key);
         return bucket == null ? null : bucket.get(key);
     }
 
@@ -60,7 +60,7 @@ public class LinkedListGenericHashTable<K, V> {
         buckets = new GenericList[buckets.length *2];
         for(int i = 0; i < tmp.length; i++){
             if(tmp[i] != null){
-                GenericElement <K,V> elem = tmp[i].head;
+                var elem = tmp[i].head;
                 while (elem != null){
                     add(elem.key, elem.value);
                     elem = elem.next;

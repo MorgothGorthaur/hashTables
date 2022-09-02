@@ -42,7 +42,7 @@ class GenericListTest {
     @Test
     public void deleteShouldReturnNull_ifNotFound() {
         //when
-        String res = list.delete("key");
+        var res = list.delete("key");
         //then
         assertNull(res);
     }
@@ -53,7 +53,7 @@ class GenericListTest {
         list.addOrReplace("key", "value");
 
         //when
-        String res = list.delete("key");
+        var res = list.delete("key");
         //then
         assertEquals(res, "value");
         assertNull(list.get("key"));
@@ -63,7 +63,7 @@ class GenericListTest {
     @Test
     public void getShouldReturnNull_ifNotFound() {
         //when
-        String res = list.get("value");
+        var res = list.get("value");
         //then
         assertNull(res);
     }
@@ -73,7 +73,7 @@ class GenericListTest {
         //given
         list.addOrReplace("key", "value");
         //when
-        String res = list.get("key");
+        var res = list.get("key");
         //then
         assertEquals(res, "value");
     }
@@ -81,7 +81,7 @@ class GenericListTest {
     @Test
     public void sizeShouldReturnZero_ifListIsEmpty(){
         //when
-        int res = list.size;
+        var res = list.size;
         //then
         assertEquals(res,0);
     }
@@ -90,7 +90,7 @@ class GenericListTest {
         //given
         list.addOrReplace("key", "value");
         //when
-        int res = list.size;
+        var res = list.size;
         //given
         assertEquals(res, 1);
     }

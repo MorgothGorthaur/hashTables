@@ -17,31 +17,34 @@ class LinkedListGenericHashTableTest {
 
     @Test
     void shouldAddAndRetrieve() {
+        //when
         table.add("vitya", 21);
-
+        //then
         assertEquals(21, table.get("vitya"));
     }
 
     @Test
     void shouldAddMultipleAndRetrieve() {
+        //when
         table.add("vitya", 21);
         table.add("andrey", 38);
-
+        //then
         assertEquals(38, table.get("andrey"));
     }
 
     @Test
     void shouldOverride_whenAdding() {
+        //when
         table.add("vitya", 38);
         table.add("vitya", 21);
-
+        //then
         assertEquals(21, table.get("vitya"));
     }
 
     @Test
     void deleteShouldReturnNull_ifNotFound() {
         //when
-        Integer res = table.delete("key");
+        var res = table.delete("key");
         //given
         assertNull(res);
     }
@@ -51,14 +54,14 @@ class LinkedListGenericHashTableTest {
         //given
         table.add("key", 44);
         //when
-        Integer res = table.delete("key");
+        var res = table.delete("key");
         //given
         assertEquals(res, 44);
         assertNull(table.get("key"));
     }
 
     @Test
-    public void testGetAndDeleteForABigSizes() {
+    void testGetAndDeleteForABigSizes() {
         //given
         for (int i = 0; i < 10000000; i++) {
             table.add(String.valueOf(i), i);
@@ -70,19 +73,19 @@ class LinkedListGenericHashTableTest {
     }
 
     @Test
-    public void sizeShouldReturnZero_ifTableIsEmpty() {
+    void sizeShouldReturnZero_ifTableIsEmpty() {
         //when
-        int res = table.size();
+        var res = table.size();
         //then
         assertEquals(res, 0);
     }
 
     @Test
-    public void sizeShouldReturnValue_ifTableIsNotEmpty() {
+    void sizeShouldReturnValue_ifTableIsNotEmpty() {
         //given
         table.add("key", 1);
         //when
-        int res = table.size();
+        var res = table.size();
         //then
         assertEquals(res, 1);
     }

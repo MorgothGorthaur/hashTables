@@ -10,7 +10,7 @@ public class CustomLinearZondingHashTable<K, V> {
 
 
     public void add(K key, V value) {
-        Integer index = getBucketIndex(key);
+        var index = getBucketIndex(key);
         if (buckets[index] == null) {
             numOfUsedBuckets++;
         }
@@ -21,7 +21,7 @@ public class CustomLinearZondingHashTable<K, V> {
     }
 
     public V delete(K key) {
-        Integer index = getBucketIndex(key);
+        var index = getBucketIndex(key);
         if (buckets[index] != null) {
             V value = buckets[index].delete();
             if (buckets[index + 1] == null) {
@@ -34,7 +34,7 @@ public class CustomLinearZondingHashTable<K, V> {
     }
 
     public V get(K key) {
-        Integer index = getBucketIndex(key);
+        var index = getBucketIndex(key);
         if (buckets[index] != null) {
             return buckets[index].value;
         }
@@ -68,9 +68,9 @@ public class CustomLinearZondingHashTable<K, V> {
     }
 
     private Integer getBucketIndex(K key) {
-        int index = (key.hashCode() & 0x7fffffff) % buckets.length;
+        var index = (key.hashCode() & 0x7fffffff) % buckets.length;
         while (buckets[index] != null) {
-            Bucket<K, V> bucket = buckets[index];
+            var bucket = buckets[index];
             if (bucket.containsKey(key)) {
                 return index;
             }

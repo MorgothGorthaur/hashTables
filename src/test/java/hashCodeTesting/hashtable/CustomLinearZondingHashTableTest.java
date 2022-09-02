@@ -9,25 +9,25 @@ class CustomLinearZondingHashTableTest {
     private CustomLinearZondingHashTable<String, String> table = new CustomLinearZondingHashTable<>();
 
     @Test
-    public void shouldIncreaseSizeByOneAfterAdding() {
+    void shouldIncreaseSizeByOneAfterAdding() {
         //given
         table.add("key", "value");
         table.add("key_2", "value");
         table.add("key_3", "value");
         //when
-        int res = table.getSize();
+        var res = table.getSize();
         //then
         assertEquals(res, 3);
     }
 
     @Test
-    public void shouldDecreaseSizeByOneAfterRemoving() {
+    void shouldDecreaseSizeByOneAfterRemoving() {
         //given
         table.add("key", "value");
         table.add("key_2", "value");
         table.delete("key_2");
         //when
-        int res = table.getSize();
+        var res = table.getSize();
         //then
         assertEquals(res, 1);
     }
@@ -37,7 +37,7 @@ class CustomLinearZondingHashTableTest {
         //given
         table.add("key", "value");
         //when
-        String res = table.get("key");
+        var res = table.get("key");
         //then
         assertEquals(res, "value");
     }
@@ -45,7 +45,7 @@ class CustomLinearZondingHashTableTest {
     @Test
     public void getShouldReturnNull_ifNotFound() {
         //when
-        String res = table.get("key");
+        var res = table.get("key");
         //then
         assertNull(res);
     }
@@ -55,7 +55,7 @@ class CustomLinearZondingHashTableTest {
         //given
         table.add("key", "value");
         //when
-        String res = table.delete("key");
+        var res = table.delete("key");
 
         //then
         assertEquals(res, "value");
@@ -65,7 +65,7 @@ class CustomLinearZondingHashTableTest {
     @Test
     public void deleteShouldReturnNull_ifNotFound() {
         //when
-        String res = table.delete("key");
+        var res = table.delete("key");
         //then
         assertNull(res);
     }
@@ -76,7 +76,8 @@ class CustomLinearZondingHashTableTest {
         table.add("key", "value");
         table.add("key_2", "value_2");
         //when
-        String res = table.toString();
+        var res = table.toString();
+        //then
         assertEquals(res, "value value_2");
     }
 
@@ -87,7 +88,7 @@ class CustomLinearZondingHashTableTest {
             table.add(String.valueOf(i), String.valueOf(i));
         }
         //when
-        int res = table.getSize();
+        var res = table.getSize();
         //then
         assertEquals(res, 10000000);
     }

@@ -60,7 +60,7 @@ class GenericList<K, V> {
     }
 
     V get(K key) {
-        GenericElement <K,V> curr = head;
+        var curr = head;
         while (curr != null){
             if(curr.containsKey(key)){
                 return curr.value;
