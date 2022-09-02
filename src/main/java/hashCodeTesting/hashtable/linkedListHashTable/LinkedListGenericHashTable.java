@@ -16,9 +16,9 @@ public class LinkedListGenericHashTable<K, V> {
 
     public void add(K key, V value) {
         GenericList<K, V> bucket = getBucketByKey(key);
-        int listSizeBeforeAdd = bucket.size();
+        int listSizeBeforeAdd = bucket.size;
         bucket.addOrReplace(key, value);
-        numOfElements += bucket.size() - listSizeBeforeAdd;
+        numOfElements += bucket.size - listSizeBeforeAdd;
         if (1.0 * buckets.length / numOfElements < 1.2) {
             rebuildTable();
         }
@@ -56,19 +56,17 @@ public class LinkedListGenericHashTable<K, V> {
     }
 
     private void rebuildTable() {
-        GenericList<K, V> tmp = new GenericList<>();
-        for (int i = 0; i < buckets.length; i++) {
-            tmp.addAll(buckets[i]);
+        GenericList <K,V> [] tmp = buckets;
+        buckets = new GenericList[buckets.length *2];
+        for(int i = 0; i < tmp.length; i++){
+            if(tmp[i] != null){
+                GenericElement <K,V> elem = tmp[i].head;
+                while (elem != null){
+                    add(elem.key, elem.value);
+                    elem = elem.next;
+                }
+            }
         }
-        buckets = new GenericList[buckets.length * 2];
-        KeyEndValue<K, V> kvKeyEndValue = tmp.deleteFirst();
-        while (kvKeyEndValue != null) {
-            K key = kvKeyEndValue.getKey();
-            V value = kvKeyEndValue.getValue();
-            add(key, value);
-            kvKeyEndValue = tmp.deleteFirst();
-        }
-
     }
 
     public int size() {

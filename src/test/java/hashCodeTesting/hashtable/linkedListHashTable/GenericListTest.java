@@ -1,6 +1,7 @@
 package hashCodeTesting.hashtable.linkedListHashTable;
 
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -78,27 +79,9 @@ class GenericListTest {
     }
 
     @Test
-    public void deleteFirstShouldReturnNull_ifListIsNull() {
-        //when
-        KeyEndValue<String, String> res = list.deleteFirst();
-        //given
-        assertNull(res);
-    }
-
-    @Test
-    public void deleteFirstShouldReturnValue_ifListIsNotEmpty() {
-        //given
-        list.addOrReplace("key", "value");
-        //when
-       KeyEndValue<String, String> res = list.deleteFirst();
-        //given
-        assertEquals(res.getKey(), "key");
-    }
-
-    @Test
     public void sizeShouldReturnZero_ifListIsEmpty(){
         //when
-        int res = list.size();
+        int res = list.size;
         //then
         assertEquals(res,0);
     }
@@ -107,25 +90,9 @@ class GenericListTest {
         //given
         list.addOrReplace("key", "value");
         //when
-        int res = list.size();
+        int res = list.size;
         //given
         assertEquals(res, 1);
     }
-
-    @Test
-    public void addAllShouldConcatLists(){
-        //given
-        list.addOrReplace("key", "value");
-        list.addOrReplace("key2", "value2");
-        GenericList <String, String> lst = new GenericList<>();
-        lst.addOrReplace("key3", "value3");
-        lst.addOrReplace("key4", "value4");
-        //when
-        list.addAll(lst);
-        //then
-        assertEquals(list.size(),4);
-        assertEquals(list.get("key4"), "value4");
-    }
-
 
 }

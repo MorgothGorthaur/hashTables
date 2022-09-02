@@ -36,7 +36,7 @@ public class CustomLinearZondingHashTable<K, V> {
     public V get(K key) {
         Integer index = getBucketIndex(key);
         if (buckets[index] != null) {
-            return buckets[index].getValue();
+            return buckets[index].value;
         }
         return null;
     }
@@ -51,7 +51,7 @@ public class CustomLinearZondingHashTable<K, V> {
         buckets = new Bucket[tmpBuckets.length * 2];
         for (int i = 0; i < tmpBuckets.length; i++) {
             if (tmpBuckets[i] != null) {
-                add(tmpBuckets[i].getKey(), tmpBuckets[i].getValue());
+                add(tmpBuckets[i].key, tmpBuckets[i].value);
             }
         }
     }
@@ -60,7 +60,7 @@ public class CustomLinearZondingHashTable<K, V> {
         var res = new StringBuilder();
         for (Bucket<K, V> bucket : buckets) {
             if (bucket != null && bucket.isUsed()) {
-                res.append(bucket.getValue().toString());
+                res.append(bucket.value.toString());
                 res.append(" ");
             }
         }
