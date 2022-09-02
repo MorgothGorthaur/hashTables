@@ -1,8 +1,5 @@
 package hashCodeTesting.hashtable.linkedListHashTable;
 
-import lombok.Getter;
-
-@Getter
 class GenericList<K, V> {
     private GenericElement<K, V> head;
     private int size = 0;
@@ -23,7 +20,7 @@ class GenericList<K, V> {
     }
 
     public void addOrReplace(K key, V value) {
-        GenericElement[] elems = getElementByKeyOrLastElem(key);
+        GenericElement[] elems = findElementByKeyAndElementBeforeItOrReturnLastElement(key);
         GenericElement<K, V> last = elems[0];
         GenericElement<K, V> next = elems[1];
         if (next != null && next.containsKey(key)) {
@@ -38,7 +35,7 @@ class GenericList<K, V> {
     }
 
     public V delete(K key) {
-        GenericElement[] elems = getElementByKeyOrLastElem(key);
+        GenericElement[] elems = findElementByKeyAndElementBeforeItOrReturnLastElement(key);
         GenericElement<K, V> last = elems[0];
         GenericElement<K, V> next = elems[1];
         if (next != null && next.containsKey(key)) {
@@ -54,7 +51,7 @@ class GenericList<K, V> {
     }
 
     public V get(K key) {
-        GenericElement[] elems = getElementByKeyOrLastElem(key);
+        GenericElement[] elems = findElementByKeyAndElementBeforeItOrReturnLastElement(key);
         GenericElement<K, V> next = elems[1];
         if (next != null && next.containsKey(key)) {
             return next.getValue();
@@ -62,7 +59,7 @@ class GenericList<K, V> {
         return null;
     }
 
-    private GenericElement[] getElementByKeyOrLastElem(K key) {
+    private GenericElement[] findElementByKeyAndElementBeforeItOrReturnLastElement(K key) {
         GenericElement<K, V> last = null;
         GenericElement<K, V> next = head;
         while (next != null && !next.containsKey(key)) {
@@ -87,10 +84,10 @@ class GenericList<K, V> {
 
     public void addAll(GenericList<K, V> lst) {
         if (lst != null) {
-            GenericElement[] elems = lst.getElementByKeyOrLastElem(null);
+            GenericElement[] elems = lst.findElementByKeyAndElementBeforeItOrReturnLastElement(null);
             GenericElement<K, V> last = elems[0];
             last.setNext(head);
-            head = lst.getHead();
+            head = lst.head;
             size += lst.size();
         }
     }
