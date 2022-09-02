@@ -26,4 +26,10 @@ class Bucket<K, V> {
 		condition = Condition.DELETED;
 		return value;
 	}
+	public boolean isUsed(){
+		return this.condition.equals(Condition.USED);
+	}
+	public boolean containsKey(K key){
+		return this.condition.equals(Condition.USED) && this.key.equals(key);
+	}
 }

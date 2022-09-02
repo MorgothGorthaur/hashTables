@@ -59,7 +59,7 @@ public class CustomLinearZondingHashTable<K, V> {
     public String toString() {
         var res = new StringBuilder();
         for (Bucket<K, V> bucket : buckets) {
-            if (bucket != null && bucket.getCondition().equals(Condition.USED)) {
+            if (bucket != null && bucket.isUsed()) {
                 res.append(bucket.getValue().toString());
                 res.append(" ");
             }
@@ -71,19 +71,11 @@ public class CustomLinearZondingHashTable<K, V> {
         int index = (key.hashCode() & 0x7fffffff) % buckets.length;
         while (buckets[index] != null) {
             Bucket<K, V> bucket = buckets[index];
-            if (checkIfKeyExist(bucket, key)) {
+            if (bucket.containsKey(key)) {
                 return index;
             }
             index++;
         }
         return index;
     }
-
-    private boolean checkIfKeyExist(Bucket<K, V> bucket, K key) {
-        if (bucket.getKey().equals(key) && bucket.getCondition().equals(Condition.USED)) {
-            return true;
-        }
-        return false;
-    }
-
 }
