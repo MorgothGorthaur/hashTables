@@ -1,6 +1,8 @@
 package hashCodeTesting.hashtable.linkedListHashTable;
 
+import lombok.Getter;
 
+@Getter
 class GenericList<K, V> {
     private GenericElement<K, V> head;
     private int size = 0;
@@ -20,10 +22,10 @@ class GenericList<K, V> {
     }
 
     public void addOrReplace(K key, V value) {
-           GenericElement [] elem = getElementByKeyOrLastElem(key);
-           GenericElement <K,V> last = elem[0];
-           GenericElement <K,V> next = elem[1];
-           if (checkIfElementExistKey(key, next)) {
+           GenericElement [] elems = getElementByKeyOrLastElem(key);
+           GenericElement <K,V> last = elems[0];
+           GenericElement <K,V> next = elems[1];
+           if (next != null && next.containsKey(key)) {
                next.setValue(value);
            } else if(last != null) {
                size ++;
@@ -36,10 +38,10 @@ class GenericList<K, V> {
     }
 
     public V delete(K key) {
-        GenericElement [] elem = getElementByKeyOrLastElem(key);
-        GenericElement <K,V> last = elem[0];
-        GenericElement <K,V> next = elem[1];
-        if(checkIfElementExistKey(key,next)){
+        GenericElement [] elems = getElementByKeyOrLastElem(key);
+        GenericElement <K,V> last = elems[0];
+        GenericElement <K,V> next = elems[1];
+        if(next != null && next.containsKey(key)){
             size --;
             if(next == head) {
                 head = next.getNext();
@@ -50,16 +52,10 @@ class GenericList<K, V> {
         }
         return null;
     }
-
-    private boolean checkIfElementExistKey(K key, GenericElement<K, V> elem) {
-        return elem != null && elem.getKey().equals(key);
-    }
-
-
     public V get(K key) {
-        GenericElement [] elem = getElementByKeyOrLastElem(key);
-        GenericElement <K,V> next = elem[1];
-        if(checkIfElementExistKey(key,next)){
+        GenericElement [] elems = getElementByKeyOrLastElem(key);
+        GenericElement <K,V> next = elems[1];
+        if(next != null && next.containsKey(key)){
             return next.getValue();
         }
         return null;
@@ -68,7 +64,7 @@ class GenericList<K, V> {
     private GenericElement[] getElementByKeyOrLastElem(K key) {
         GenericElement<K, V> last = null;
         GenericElement<K, V> next = head;
-        while (next != null && !next.getKey().equals(key)) {
+        while (next != null && !next.containsKey(key)) {
             last = next;
             next = next.getNext();
         }
@@ -86,6 +82,12 @@ class GenericList<K, V> {
             return new KeyEndValue(elem);
         }
         return null;
+    }
+    public void addAll(GenericList <K,V> lst){
+        GenericElement [] elems = getElementByKeyOrLastElem(null);
+        GenericElement <K,V> last = elems[0];
+        last.setNext(lst.getHead());
+        size += lst.size();
     }
 
     public int size() {

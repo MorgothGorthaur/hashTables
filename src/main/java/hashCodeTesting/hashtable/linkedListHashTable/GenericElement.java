@@ -17,5 +17,7 @@ class GenericElement<K, V> {
         this.key = key;
         this.value = value;
     }
-
+    public boolean containsKey(K key){
+        return this.key.equals(key);
+    }
 }

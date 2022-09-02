@@ -112,4 +112,19 @@ class GenericListTest {
         assertEquals(res, 1);
     }
 
+    @Test
+    public void addAllShouldConcatLists(){
+        //given
+        list.addOrReplace("key", "value");
+        list.addOrReplace("key2", "value2");
+        GenericList <String, String> lst = new GenericList<>();
+        lst.addOrReplace("key3", "value3");
+        lst.addOrReplace("key4", "value4");
+        //when
+        list.addAll(lst);
+        //then
+        assertEquals(list.size(),4);
+        assertEquals(list.get("key4"), "value4");
+    }
+
 }

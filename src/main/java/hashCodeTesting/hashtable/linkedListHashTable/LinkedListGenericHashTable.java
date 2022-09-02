@@ -56,15 +56,19 @@ public class LinkedListGenericHashTable<K, V> {
     }
 
     private void rebuildTable() {
-        GenericList<K,V>[] tmp = Arrays.stream(buckets).filter(Objects::nonNull).toArray(GenericList[] ::new);
-        buckets = new GenericList[buckets.length * 2];
-        for(GenericList<K,V> bucketList : tmp){
-            KeyEndValue<K,V> elem = bucketList.deleteFirst();
-            while (elem != null){
-                add(elem.getKey(), elem.getValue());
-                elem = bucketList.deleteFirst();
-            }
+        GenericList<K,V> tmp = new GenericList<>();
+        for (GenericList <K,V> bucket : buckets){
+            tmp.addAll(bucket);
         }
+        buckets = new GenericList[buckets.length * 2];
+        KeyEndValue <K,V> kvKeyEndValue = tmp.deleteFirst();
+        while (kvKeyEndValue != null){
+            K key = kvKeyEndValue.getKey();
+            V value = kvKeyEndValue.getValue();
+            add(key,value);
+            kvKeyEndValue = tmp.deleteFirst();
+        }
+
     }
 
     public int size() {
