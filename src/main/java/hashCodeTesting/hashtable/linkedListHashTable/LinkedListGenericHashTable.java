@@ -43,7 +43,7 @@ public class LinkedListGenericHashTable<K, V> {
         if (bucket != null) {
             V deleted = bucket.delete(key);
             if (deleted != null) {
-                numOfElements --;
+                numOfElements--;
             }
             return deleted;
         }
@@ -56,16 +56,16 @@ public class LinkedListGenericHashTable<K, V> {
     }
 
     private void rebuildTable() {
-        GenericList<K,V> tmp = new GenericList<>();
-        for (GenericList <K,V> bucket : buckets){
-            tmp.addAll(bucket);
+        GenericList<K, V> tmp = new GenericList<>();
+        for (int i = 0; i < buckets.length; i++) {
+            tmp.addAll(buckets[i]);
         }
         buckets = new GenericList[buckets.length * 2];
-        KeyEndValue <K,V> kvKeyEndValue = tmp.deleteFirst();
-        while (kvKeyEndValue != null){
+        KeyEndValue<K, V> kvKeyEndValue = tmp.deleteFirst();
+        while (kvKeyEndValue != null) {
             K key = kvKeyEndValue.getKey();
             V value = kvKeyEndValue.getValue();
-            add(key,value);
+            add(key, value);
             kvKeyEndValue = tmp.deleteFirst();
         }
 

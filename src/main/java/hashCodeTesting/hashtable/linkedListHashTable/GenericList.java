@@ -6,6 +6,7 @@ import lombok.Getter;
 class GenericList<K, V> {
     private GenericElement<K, V> head;
     private int size = 0;
+
     public String getListAsString() {
         var result = new StringBuilder();
         var p = head;
@@ -22,28 +23,27 @@ class GenericList<K, V> {
     }
 
     public void addOrReplace(K key, V value) {
-           GenericElement [] elems = getElementByKeyOrLastElem(key);
-           GenericElement <K,V> last = elems[0];
-           GenericElement <K,V> next = elems[1];
-           if (next != null && next.containsKey(key)) {
-               next.setValue(value);
-           } else if(last != null) {
-               size ++;
-               last.setNext(new GenericElement<>(key, value));
-           } else {
-               size ++;
-               head = new GenericElement<>(key,value);
-           }
-
+        GenericElement[] elems = getElementByKeyOrLastElem(key);
+        GenericElement<K, V> last = elems[0];
+        GenericElement<K, V> next = elems[1];
+        if (next != null && next.containsKey(key)) {
+            next.setValue(value);
+        } else if (last != null) {
+            size++;
+            last.setNext(new GenericElement<>(key, value));
+        } else {
+            size++;
+            head = new GenericElement<>(key, value);
+        }
     }
 
     public V delete(K key) {
-        GenericElement [] elems = getElementByKeyOrLastElem(key);
-        GenericElement <K,V> last = elems[0];
-        GenericElement <K,V> next = elems[1];
-        if(next != null && next.containsKey(key)){
-            size --;
-            if(next == head) {
+        GenericElement[] elems = getElementByKeyOrLastElem(key);
+        GenericElement<K, V> last = elems[0];
+        GenericElement<K, V> next = elems[1];
+        if (next != null && next.containsKey(key)) {
+            size--;
+            if (next == head) {
                 head = next.getNext();
             } else {
                 last.setNext(next.getNext());
@@ -52,10 +52,11 @@ class GenericList<K, V> {
         }
         return null;
     }
+
     public V get(K key) {
-        GenericElement [] elems = getElementByKeyOrLastElem(key);
-        GenericElement <K,V> next = elems[1];
-        if(next != null && next.containsKey(key)){
+        GenericElement[] elems = getElementByKeyOrLastElem(key);
+        GenericElement<K, V> next = elems[1];
+        if (next != null && next.containsKey(key)) {
             return next.getValue();
         }
         return null;
@@ -68,7 +69,7 @@ class GenericList<K, V> {
             last = next;
             next = next.getNext();
         }
-        GenericElement [] elems = new GenericElement[2];
+        GenericElement[] elems = new GenericElement[2];
         elems[0] = last;
         elems[1] = next;
         return elems;
@@ -76,18 +77,22 @@ class GenericList<K, V> {
 
     public KeyEndValue deleteFirst() {
         if (head != null) {
-            size --;
+            size--;
             GenericElement<K, V> elem = head;
             head = elem.getNext();
             return new KeyEndValue(elem);
         }
         return null;
     }
-    public void addAll(GenericList <K,V> lst){
-        GenericElement [] elems = getElementByKeyOrLastElem(null);
-        GenericElement <K,V> last = elems[0];
-        last.setNext(lst.getHead());
-        size += lst.size();
+
+    public void addAll(GenericList<K, V> lst) {
+        if (lst != null) {
+            GenericElement[] elems = lst.getElementByKeyOrLastElem(null);
+            GenericElement<K, V> last = elems[0];
+            last.setNext(head);
+            head = lst.getHead();
+            size += lst.size();
+        }
     }
 
     public int size() {
